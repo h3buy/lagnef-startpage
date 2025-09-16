@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="icon.png" type="image/png">
+    <title>Lagnef</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f0f1a;
+            --card-color: rgba(30, 30, 45, 0.85);
+            --text-color: #f0f0f5;
+            --accent-color: #5e9eff;
+            --secondary-accent: #a78bfa;
+            --border-radius: 20px;
+            --glow-color: rgba(94, 158, 255, 0.4);
+            --secondary-glow: rgba(167, 139, 250, 0.3);
+            --secondary-text: #b0b0c0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, system-ui, sans-serif;
+            background: linear-gradient(135deg, #0f0f1a, #1a1a2e, #2a1a3e);
+            background-size: 400% 400%;
+            color: var(--text-color);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            animation: gradient 20s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            background: radial-gradient(circle, var(--accent-color) 0%, transparent 70%);
+            border-radius: 50%;
+            mix-blend-mode: screen;
+            box-shadow: 0 0 10px var(--glow-color);
+            will-change: transform;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 2.5rem;
+            width: 100%;
+            text-align: center;
+            gap: 1.2rem;
+        }
+
+        .logo-text {
+            font-size: clamp(2.5rem, 9vw, 4.2rem);
+            font-weight: 900;
+            font-family: 'Montserrat', sans-serif;
+            text-shadow: 0 0 25px var(--glow-color), 0 0 50px var(--secondary-glow);
+            user-select: none;
+            background: linear-gradient(45deg, var(--accent-color), var(--secondary-accent), var(--accent-color));
+            background-size: 200%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: shimmer 6s linear infinite;
+        }
+
+.logo-img {
+    width: clamp(6.5rem, 16vw, 8.5rem);  /* Было 3.5rem, 12vw, 5.5rem */
+    height: clamp(6.5rem, 16vw, 8.5rem); /* Было 3.5rem, 12vw, 5.5rem */
+    object-fit: contain;
+    filter: drop-shadow(0 0 15px var(--glow-color));
+    transition: transform 0.4s ease;
+    align-self: center;
+}
+
+        .logo-img:hover {
+            transform: scale(1.0);
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 0%; }
+            100% { background-position: 200%; }
+        }
+
+        .search-card {
+            background: var(--card-color);
+            backdrop-filter: blur(15px);
+            border-radius: var(--border-radius);
+            padding: clamp(1.8rem, 4.5vw, 3rem);
+            width: 100%;
+            max-width: 700px;
+            min-width: 300px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .search-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .search-engine-selector {
+            margin-bottom: 1.8rem;
+            position: relative;
+        }
+
+        .custom-select {
+            position: relative;
+            width: 100%;
+        }
+
+        .custom-select select {
+            display: none;
+        }
+
+        .select-selected {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: clamp(0.5rem, 2.5vw, 0.8rem) clamp(1rem, 3.5vw, 1.5rem);
+            color: var(--text-color);
+            font-family: 'Inter', sans-serif;
+            font-size: clamp(0.9rem, 2.8vw, 1rem);
+            cursor: pointer;
+            transition: all 0.4s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+        }
+
+        .select-selected:hover {
+            border-color: var(--secondary-accent);
+            background: rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 10px var(--secondary-glow);
+        }
+
+        .select-selected svg {
+            width: 20px;
+            height: 20px;
+            margin-left: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .select-selected.select-active svg {
+            transform: rotate(180deg);
+        }
+
+        .select-items {
+            position: absolute;
+            background: var(--card-color);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            top: 100%;
+            left: 0;
+            right: 0;
+            z-index: 99;
+            margin-top: 8px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .select-items.select-show {
+            max-height: 220px;
+            overflow-y: auto;
+        }
+
+        .select-items::-webkit-scrollbar {
+            display: none;
+        }
+
+        .select-items div {
+            padding: clamp(0.5rem, 2.5vw, 0.8rem) clamp(1rem, 3.5vw, 1.5rem);
+            cursor: pointer;
+            transition: all 0.4s ease;
+            user-select: none;
+        }
+
+        .select-items div:hover {
+            background: var(--secondary-accent);
+            color: white;
+        }
+
+        .search-form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .search-input {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: var(--border-radius);
+            padding: clamp(1rem, 3.5vw, 1.5rem);
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            color: var(--text-color);
+            width: 100%;
+            outline: none;
+            transition: all 0.4s ease;
+            box-sizing: border-box;
+            resize: none;
+            white-space: nowrap;
+            overflow-x: auto;
+            overflow-y: auto;
+            max-height: 5rem;
+            line-height: 1.6rem;
+            user-select: none;
+        }
+
+        .search-input:focus {
+            border-color: var(--accent-color);
+            background: rgba(0, 0, 0, 0.5);
+            transform: scale(1.02);
+            box-shadow: 0 0 15px var(--glow-color);
+        }
+
+        .search-button {
+            background: linear-gradient(45deg, var(--accent-color), var(--secondary-accent), var(--accent-color));
+            background-size: 200%;
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            padding: clamp(1rem, 3vw, 1.2rem);
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 20px var(--glow-color);
+            animation: shimmer 6s linear infinite;
+            margin-top: 1.5rem;
+            gap: 0.8rem;
+        }
+
+        .search-button:hover {
+            background: linear-gradient(45deg, var(--secondary-accent), var(--accent-color));
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px var(--secondary-glow);
+        }
+
+        .quick-links {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.2rem;
+            margin-top: 2.5rem;
+        }
+
+        .quick-link, .time-display {
+            background: rgba(0, 0, 0, 0.4);
+            padding: clamp(0.8rem, 2.5vw, 1.2rem);
+            border-radius: 12px;
+            font-size: clamp(0.9rem, 2.8vw, 1rem);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(8px);
+            user-select: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+        }
+
+        .quick-link:hover, .time-display:hover {
+            background: var(--secondary-accent);
+            transform: translateY(-5px);
+            border-color: var(--accent-color);
+            box-shadow: 0 5px 20px var(--secondary-glow);
+            color: white;
+        }
+
+        .icon {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 25px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+            color: var(--secondary-text);
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 0 clamp(15px, 3.5vw, 25px);
+            opacity: 0.9;
+            transition: opacity 0.4s ease;
+            z-index: 1;
+        }
+
+        .footer:hover {
+            opacity: 1;
+        }
+
+        .footer span {
+            color: var(--accent-color);
+            font-weight: 600;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .footer span:hover {
+            color: var(--secondary-accent);
+        }
+
+        .footer span::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--secondary-accent);
+            transition: width 0.3s ease;
+        }
+
+        .footer span:hover::after {
+            width: 100%;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 1.2rem;
+                justify-content: flex-start;
+                padding-top: 3rem;
+            }
+
+            .logo-container {
+                margin-bottom: 1.5rem;
+                gap: 0.8rem;
+            }
+
+            .logo-img {
+                width: clamp(2.8rem, 10vw, 4.5rem);
+                height: clamp(2.8rem, 10vw, 4.5rem);
+            }
+
+            .quick-links {
+                grid-template-columns: 1fr;
+                gap: 0.8rem;
+            }
+
+            .search-card {
+                padding: 1.5rem;
+            }
+
+            .footer {
+                bottom: 15px;
+                font-size: 0.75rem;
+            }
+
+            .particles {
+                display: none;
+            }
+        }
+
+        @media (max-height: 700px) {
+            .container {
+                padding-top: 1.5rem;
+                padding-bottom: 1.5rem;
+            }
+            
+            .logo-container {
+                margin-bottom: 1rem;
+            }
+        }
+
+        @media (max-width: 900px) and (min-width: 601px) {
+            .container {
+                padding: 1.8rem;
+            }
+
+            .quick-links {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+
+            .search-card {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+
+    <div class="container">
+        <div class="logo-container">
+            <img src="logo.png" alt="Lagnef Logo" class="logo-img">
+            <h1 class="logo-text">Lagnef</h1>
+        </div>
+        
+        <div class="search-card">
+            <div class="search-engine-selector">
+                <div class="custom-select">
+                    <select id="searchEngine">
+                        <option value="duckduckgo">DuckDuckGo</option>
+                        <option value="google">Google</option>
+                        <option value="yandex">Яндекс</option>
+                    </select>
+                    <div class="select-selected" id="selectSelected">
+                        DuckDuckGo
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="icon">
+                            <path d="M7 10l5 5 5-5z"/>
+                        </svg>
+                    </div>
+                    <div class="select-items">
+                        <div data-value="duckduckgo">DuckDuckGo</div>
+                        <div data-value="google">Google</div>
+                        <div data-value="yandex">Яндекс</div>
+                    </div>
+                </div>
+            </div>
+            
+            <form class="search-form" id="searchForm">
+                <div class="search-input-container">
+                    <input type="text" 
+                           class="search-input" 
+                           placeholder="Введите запрос или URL..." 
+                           autocomplete="off"
+                           autofocus
+                           id="searchQuery">
+                </div>
+                
+                <button type="submit" class="search-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="icon">
+                        <path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 0 0 1.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 0 0-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 0 0 5.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                    </svg>
+                    Найти
+                </button>
+            </form>
+            
+            <div class="quick-links" id="quickLinks"></div>
+        </div>
+    </div>
+
+    <div class="footer" id="footer">
+        Поиск через <span id="currentEngine">DuckDuckGo</span>. 
+        Lagnef — ваш проводник в мир знаний.
+        Мы не собираем о вас никаких данных. Всё конфиденциально😊
+    </div>
+
+    <script>
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const particleCount = Math.min(Math.floor(window.innerWidth / 20), 40);
+            
+            const fragment = document.createDocumentFragment();
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                const size = Math.random() * 10 + 6;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.opacity = Math.random() * 0.3 + 0.1;
+                
+                fragment.appendChild(particle);
+                animateParticle(particle);
+            }
+            
+            container.appendChild(fragment);
+        }
+        
+        function animateParticle(particle) {
+            let x = Math.random() * 100;
+            let y = Math.random() * 100;
+            const speedX = (Math.random() - 0.5) * 0.03;
+            const speedY = (Math.random() - 0.5) * 0.03;
+            
+            function move() {
+                x += speedX;
+                y += speedY;
+                
+                if (x <= 0 || x >= 100) x = Math.random() * 100;
+                if (y <= 0 || y >= 100) y = Math.random() * 100;
+                
+                particle.style.transform = `translate(${x}vw, ${y}vh)`;
+                
+                requestAnimationFrame(move);
+            }
+            
+            move();
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchForm = document.getElementById('searchForm');
+            const searchInput = document.getElementById('searchQuery');
+            const searchEngine = document.getElementById('searchEngine');
+            const selectSelected = document.getElementById('selectSelected');
+            const selectItems = document.querySelector('.select-items');
+            const quickLinks = document.getElementById('quickLinks');
+            const currentEngine = document.getElementById('currentEngine');
+            
+            createParticles();
+            
+            const savedEngine = localStorage.getItem('preferredSearchEngine') || 'duckduckgo';
+            searchEngine.value = savedEngine;
+            updateEngineDisplay(savedEngine);
+            
+            initQuickLinks();
+            
+            setTimeout(() => searchInput.focus(), 50);
+            
+            selectSelected.addEventListener('click', function(e) {
+                e.stopPropagation();
+                selectItems.classList.toggle('select-show');
+                this.classList.toggle('select-active');
+            });
+            
+            document.querySelectorAll('.select-items div').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const selectedEngine = this.dataset.value;
+                    searchEngine.value = selectedEngine;
+                    selectSelected.firstChild.textContent = this.textContent;
+                    selectItems.classList.remove('select-show');
+                    selectSelected.classList.remove('select-active');
+                    saveEngine(selectedEngine);
+                });
+            });
+            
+            document.addEventListener('click', function() {
+                selectItems.classList.remove('select-show');
+                selectSelected.classList.remove('select-active');
+            });
+            
+            searchForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const query = searchInput.value.trim();
+                if (!query) return;
+                
+                if (/^(https?:\/\/)?([\w.-]+\.[a-z]{2,})(\/.*)?$/i.test(query)) {
+                    window.location.href = query.match(/^https?:\/\//i) ? query : 'https://' + query;
+                    return;
+                }
+                
+                performSearch(query);
+            });
+            
+            function performSearch(query) {
+                const engines = {
+                    google: `https://www.google.com/search?q=${encodeURIComponent(query)}`,
+                    yandex: `https://yandex.ru/search/?text=${encodeURIComponent(query)}`,
+                    duckduckgo: `https://duckduckgo.com/?q=${encodeURIComponent(query)}`
+                };
+                
+                window.location.href = engines[searchEngine.value] || engines.duckduckgo;
+            }
+            
+            function saveEngine(engine) {
+                localStorage.setItem('preferredSearchEngine', engine);
+                updateEngineDisplay(engine);
+            }
+            
+            function updateEngineDisplay(engine) {
+                const engineNames = {
+                    google: 'Google',
+                    yandex: 'Яндекс',
+                    duckduckgo: 'DuckDuckGo'
+                };
+                selectSelected.firstChild.textContent = engineNames[engine];
+                currentEngine.textContent = engineNames[engine];
+            }
+            
+            function initQuickLinks() {
+                const now = new Date();
+                const timeStr = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                
+                quickLinks.innerHTML = `
+                    <div class="quick-link" data-query="погода сейчас">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="icon">
+                            <path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 0 0 1.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 0 0-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 0 0 5.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                        </svg>
+                        Погода сейчас
+                    </div>
+                    <div class="time-display" data-query="текущее время">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="icon">
+                            <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-14a1 1 0 0 0-1 1v5h-4a1 1 0 0 0 0 2h5a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1z"/>
+                        </svg>
+                        ${timeStr}
+                    </div>
+                `;
+                
+                quickLinks.querySelectorAll('.quick-link, .time-display').forEach(link => {
+                    link.addEventListener('click', function() {
+                        searchInput.value = this.dataset.query;
+                        searchForm.dispatchEvent(new Event('submit'));
+                    });
+                });
+                
+                setInterval(() => {
+                    const now = new Date();
+                    const timeElement = quickLinks.querySelector('.time-display');
+                    if (timeElement) {
+                        timeElement.innerHTML = `
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="icon">
+                                <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-14a1 1 0 0 0-1 1v5h-4a1 1 0 0 0 0 2h5a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1z"/>
+                            </svg>
+                            ${now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                        `;
+                        timeElement.dataset.query = `текущее время ${now.toLocaleTimeString()}`;
+                    }
+                }, 60000);
+            }
+        });
+    </script>
+</body>
+</html>
